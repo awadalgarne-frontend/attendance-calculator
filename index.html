@@ -136,6 +136,12 @@
 <div class="card p-4">
   <h3 class="text-center mb-3">تقرير الحضور والانصراف</h3>
 
+
+  <div class="card shadow p-4 text-center" style="min-width:300px">
+    <div id="dayName" class="fs-4 fw-bold mb-2">اليوم / </div>
+    <div id="gregorianDate" class="text-primary fs-5">التاريخ / </div>
+</div>
+<br>
   <!-- أوقات الدوام -->
   <div class="row mb-3">
     <div class="col-md-6">
@@ -178,6 +184,33 @@
   </div>
 </div>
 
+
+<script>
+    const daysArabic = ["الأحد", "الاثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"];
+
+    const today = new Date();
+
+    // اسم اليوم
+    const dayName = daysArabic[today.getDay()];
+
+    // التاريخ الميلادي
+    const gregorianFormatter = new Intl.DateTimeFormat('ar-SA', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
+
+    // التاريخ الهجري
+    const hijriFormatter = new Intl.DateTimeFormat('ar-SA-u-ca-islamic', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
+
+    document.getElementById('dayName').innerText = dayName;
+    document.getElementById('gregorianDate').innerText = '📆 ' + gregorianFormatter.format(today);
+    document.getElementById('hijriDate').innerText = '🕌 ' + hijriFormatter.format(today);
+</script>
 <script>
 // بيانات الموظفين
 const employees = [
