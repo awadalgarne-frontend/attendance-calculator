@@ -57,14 +57,16 @@
     border-width: 1px;
   }
 
-  input[type="time"] {
+  input[type="time"],
+  input[type="date"] {
     border-radius: 8px;
     border: 1px solid #cce3f4;
     background: #f7fbff;
     transition: all 0.2s ease-in-out;
   }
 
-  input[type="time"]:focus {
+  input[type="time"]:focus,
+  input[type="date"]:focus {
     border-color: #0078d7;
     box-shadow: 0 0 0 0.15rem rgba(0,120,215,0.2);
   }
@@ -101,7 +103,6 @@
     color: #0f5132;
   }
 
-  /* تحسين الطباعة */
   @media print {
     body {
       background: white !important;
@@ -116,7 +117,8 @@
       display: none !important;
     }
 
-    input[type="time"] {
+    input[type="time"],
+    input[type="date"] {
       border: none !important;
       background: transparent !important;
       font-weight: bold;
@@ -136,12 +138,17 @@
 <div class="card p-4">
   <h3 class="text-center mb-3">تقرير الحضور والانصراف</h3>
 
-
+  <!-- ✅ التاريخ القابل للتعديل -->
   <div class="card shadow p-4 text-center" style="min-width:300px">
-    <div id="dayName" class="fs-4 fw-bold mb-2">اليوم / </div>
-    <div id="gregorianDate" class="text-primary fs-5">التاريخ / </div>
-</div>
-<br>
+    <div class="mb-2">
+      <input type="date" id="dateInput" class="form-control text-center">
+    </div>
+    <div id="dayName" class="fs-4 fw-bold mb-2">اليوم /</div>
+    <div id="gregorianDate" class="text-primary fs-5">التاريخ /</div>
+  </div>
+
+  <br>
+
   <!-- أوقات الدوام -->
   <div class="row mb-3">
     <div class="col-md-6">
@@ -184,33 +191,42 @@
   </div>
 </div>
 
-
+<!-- ✅ سكربت التاريخ القابل للتعديل -->
 <script>
-    const daysArabic = ["الأحد", "الاثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"];
+  const daysArabic = ["الأحد", "الاثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"];
 
-    const today = new Date();
+  const dateInput = document.getElementById("dateInput");
 
-    // اسم اليوم
-    const dayName = daysArabic[today.getDay()];
+  const today = new Date();
+  dateInput.valueAsDate = today;
 
-    // التاريخ الميلادي
+  function updateDates(date) {
+    const dayName = daysArabic[date.getDay()];
+
     const gregorianFormatter = new Intl.DateTimeFormat('ar-SA', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
     });
 
-    // التاريخ الهجري
     const hijriFormatter = new Intl.DateTimeFormat('ar-SA-u-ca-islamic', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
     });
 
-    document.getElementById('dayName').innerText = dayName;
-    document.getElementById('gregorianDate').innerText = '📆 ' + gregorianFormatter.format(today);
-    document.getElementById('hijriDate').innerText = '🕌 ' + hijriFormatter.format(today);
+    document.getElementById('dayName').innerText = "اليوم : " + dayName;
+    document.getElementById('gregorianDate').innerText = "📆 " + gregorianFormatter.format(date);
+    document.getElementById('hijriDate').innerText = "🕌 " + hijriFormatter.format(date);
+  }
+
+  dateInput.addEventListener("change", function () {
+    updateDates(new Date(this.value));
+  });
+
+  updateDates(today);
 </script>
+
 <script>
 // بيانات الموظفين
 const employees = [
